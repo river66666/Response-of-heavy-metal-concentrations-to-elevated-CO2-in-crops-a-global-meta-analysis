@@ -1,0 +1,52 @@
+# FIG S3 AND FIG S4
+library(openxlsx)
+library(metafor)
+
+library(glmulti)
+
+
+data <- read.xlsx("D:/META/data .xlsx", sheet = 1)
+
+#FIG S3
+Field_data <- subset(data, Type_1 == "Field")
+Greenhouse_data <- subset(data, Type_1 == "Greenhouse")
+OTC_data <- subset(data, Type_1 == "OTC")
+
+Field_data <- escalc(measure = "ROM",
+                     m2i = Field_data$C_METAL_O, sd1i = Field_data$C_METAL_SD, n1i = Field_data$C_n,
+                     m1i = Field_data$T_METAL_O, sd2i = Field_data$T_METAL_SD, n2i = Field_data$T_n)
+Greenhouse_data <- escalc(measure = "ROM",
+                          m2i = Greenhouse_data$C_METAL_O, sd1i = Greenhouse_data$C_METAL_SD, n1i = Greenhouse_data$C_n,
+                          m1i = Greenhouse_data$T_METAL_O, sd2i = Greenhouse_data$T_METAL_SD, n2i = Greenhouse_data$T_n)
+OTC_data <- escalc(measure = "ROM",
+                   m2i = OTC_data$C_METAL_O, sd1i = OTC_data$C_METAL_SD, n1i = OTC_data$C_n,
+                   m1i = OTC_data$T_METAL_O, sd2i = OTC_data$T_METAL_SD, n2i = OTC_data$T_n)
+
+
+Field_res <- rma(yi, vi, data = Field_data, method="REML")
+Greenhouse_res <- rma(yi, vi, data = Greenhouse_data, method="REML")
+OTC_res <- rma(yi, vi, data = OTC_data, method="REML")
+
+
+
+
+summary(Field_res)
+
+summary(Greenhouse_res)
+
+summary(Field_res)
+
+#FIG S4
+
+Hydroponics_data <- subset(data, Type_2 == "Hydroponics")
+Hydroponics_data <- escalc(measure = "ROM",
+                           m2i = Hydroponics_data$C_METAL_O, sd1i = Hydroponics_data$C_METAL_SD, n1i = Hydroponics_data$C_n,
+                           m1i = Hydroponics_data$T_METAL_O, sd2i = Hydroponics_data$T_METAL_SD, n2i = Hydroponics_data$T_n)
+Hydroponics_res <- rma(yi, vi, data = Hydroponics_data, method="REML")
+summary(Hydroponics_res)
+Soil_data <- subset(data, Type_2 == "Soil")
+Soil_data <- escalc(measure = "ROM",
+                    m2i = Soil_data$C_METAL_O, sd1i = Soil_data$C_METAL_SD, n1i = Soil_data$C_n,
+                    m1i = Soil_data$T_METAL_O, sd2i = Soil_data$T_METAL_SD, n2i = Soil_data$T_n)
+Soil_res <- rma(yi, vi, data = Soil_data, method="REML")
+summary(Soil_res)

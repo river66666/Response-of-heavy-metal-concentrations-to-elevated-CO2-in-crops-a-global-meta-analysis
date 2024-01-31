@@ -1,0 +1,22 @@
+
+library(openxlsx)
+library(randomForest)
+
+all_data <- read.xlsx("D:/META/data .xlsx", sheet = 2)
+#When classification is needed, add the corresponding code (such as, Type_5 == "EN")
+
+df <- data.frame(
+  LN = all_data$LN,
+  Delta_CO2 = all_data$ΔCO2,
+  time = all_data$time,
+  CON = all_data$METAL_CON)
+
+
+
+
+rf_model <- randomForest(LN~CON+Delta_CO2+time, data = df, mtry=4,ntree =1000,proximity = TRUE, importance=TRUE)
+
+
+importance(rf_model)
+varImpPlot(rf_model)
+plot(rf_model)

@@ -1,0 +1,62 @@
+
+library(readxl)
+library(openxlsx)
+
+data <- read.xlsx("D:/META/全部重新分析/final_data .xlsx", sheet = 3)
+#When classification is needed, add the corresponding code (such as, Type_5 == "EN")
+
+
+
+x <- data$CO2#OR time
+y <- data$METAL_LN_2
+
+
+power_function <- function(z, a, b) {
+  return(a * z^b)
+}
+
+
+
+# When a model error is reported, it is considered that the model cannot be fitted and the code related to the model is deleted.
+# 创建模型
+y1 <- lm(y ~ x )
+y2 <- lm(y ~ x + I(x^2))
+y3 <- lm(y ~ I(1/x))
+y4 <- lm(y ~ log(x))
+y5 <- nls(y ~ power_function(x, a, b), data = data, start = list(a = 2, b = 1.5))
+y6 <- lm(y ~ 1) 
+y7 <- nls(y ~ exp(a + b * x), data = data, start = list(a = 2.5, b = 0.1))
+
+
+
+AICy1 <- AIC(y1)
+BICy1 <- BIC(y1)
+
+AICy2 <- AIC(y2)
+BICy2 <- BIC(y2)
+
+AICy3 <- AIC(y3)
+BICy3 <- BIC(y3)
+
+AICy4 <- AIC(y4)
+BICy4 <- BIC(y4)
+
+AICy5 <- AIC(y5)
+BICy5 <- BIC(y5)
+
+AICy6 <- AIC(y6)
+BICy6 <- BIC(y6)
+
+AICy7 <- AIC(y7)
+BICy7 <- BIC(y7)
+
+
+cat("y ~  a  - AIC:", AICy6, "BIC:", BICy6, "\n")
+cat("y ~ x  Model - AIC:", AICy1, "BIC:", BICy1, "\n")
+cat("y ~ x + I(x^2) Model - AIC:", AICy2, "BIC:", BICy2, "\n")
+cat("y ~ I(1/x) Model - AIC:", AICy3, "BIC:", BICy3, "\n")
+cat("y ~ y ~ log(x) - AIC:", AICy4, "BIC:", BICy4, "\n")
+cat("y ~ y ~ a * x^b - AIC:", AICy5, "BIC:", BICy5, "\n")
+cat("y ~ exp(a + b * x) - AIC:", AICy7, "BIC:", BICy7, "\n")
+
+
