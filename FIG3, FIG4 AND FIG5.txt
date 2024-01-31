@@ -2,7 +2,7 @@
 library(readxl)
 library(openxlsx)
 
-data <- read.xlsx("D:/META/全部重新分析/final_data .xlsx", sheet = 3)
+data <- read.xlsx("D:/META/data .xlsx", sheet = 3)
 #When classification is needed, add the corresponding code (such as, Type_5 == "EN")
 
 
