@@ -1,0 +1,46 @@
+#Table S1, FIG S2,FIG 1, AND FIG 2
+library(openxlsx)
+library(metafor)
+library(ggplot2)
+library(glmulti)
+
+
+data <- read.xlsx("D:/META/全部重新分析/final_data .xlsx", sheet = 1)
+
+
+#Overall analysis
+
+METAL_data <- escalc(measure = "ROM",
+                     m2i = data$C_METAL_O, sd1i = data$C_METAL_SD, n1i = data$C_n,
+                     m1i = data$T_METAL_O, sd2i = data$T_METAL_SD, n2i = data$T_n)
+BIO_data <- escalc(measure = "ROM",
+                   m2i = data$C_BIO_O, sd1i = data$C_BIO_SD, n1i = data$C_n,
+                   m1i = data$T_BIO_O, sd2i = data$T_BIO_SD, n2i = data$T_n)
+PP_data <- escalc(measure = "ROM",
+                  m2i = data$C_PP_O, sd1i = data$C_PP_SD, n1i = data$C_n,
+                  m1i = data$T_PP_O, sd2i = data$T_PP_SD, n2i = data$T_n)
+
+METAL_res <- rma(yi, vi, data = METAL_data, method="REML")
+BIO_res <- rma(yi, vi, data = BIO_data, method="REML")
+PP_res <- rma(yi, vi, data = PP_data, method="REML")
+
+#Individual heavy metal analysis
+#"CU" can be replaced with other parameters
+#Conditions can be added for different crops (for example, Type_3 == "Other").
+CU_data <- subset(data, Type_4 == "CU")
+CU_data <- escalc(measure = "ROM",
+                  m2i = CU_data$C_METAL_O, sd1i = CU_data$C_METAL_SD, n1i = CU_data$C_n,
+                  m1i = CU_data$T_METAL_O, sd2i = CU_data$T_METAL_SD, n2i = CU_data$T_n)
+
+CU_res <- rma(yi, vi, data = CU_data, method="REML")
+
+
+
+funnel(METAL_res)
+summary(METAL_res)
+funnel(BIO_res)
+summary(BIO_res)
+funnel(PP_res)
+summary(PP_res)
+
+summary(CU_res)
