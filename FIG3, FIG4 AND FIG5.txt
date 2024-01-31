@@ -18,7 +18,7 @@ power_function <- function(z, a, b) {
 
 
 # When a model error is reported, it is considered that the model cannot be fitted and the code related to the model is deleted.
-# 创建模型
+
 y1 <- lm(y ~ x )
 y2 <- lm(y ~ x + I(x^2))
 y3 <- lm(y ~ I(1/x))
